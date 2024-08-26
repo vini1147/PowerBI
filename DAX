@@ -1,0 +1,25 @@
+var _dataCLExt = primeiro_pag_mbc[competencia]
+var _user = primeiro_pag_mbc[userId]
+var _tbAtividadesPassadasEx =
+    FILTER(
+        primeiro_pag_mbc,
+        primeiro_pag_mbc[competencia] <= _dataCLExt &&
+        primeiro_pag_mbc[userId] = _user
+    )
+var _tbDatasInicioSeq =
+    FILTER(
+        _tbAtividadesPassadasEx,
+        var _dataCL = primeiro_pag_mbc[competencia]
+        VAR _tbAtividadesPassadas =
+            FILTER(
+                primeiro_pag_mbc,
+                primeiro_pag_mbc[competencia] < _dataCL &&
+                primeiro_pag_mbc[userId] = _user
+            )
+        var _dataAnterior = MAXX(_tbAtividadesPassadas,[competencia])
+        var _flagInicioSeq = EDATE(_dataCL, - 1) <> _dataAnterior
+        RETURN _flagInicioSeq
+    )
+VAR _dataInicioBloco = MAXX(_tbDatasInicioSeq,[competencia])
+return
+DATEDIFF( _dataInicioBloco, _dataCLExt,MONTH )
